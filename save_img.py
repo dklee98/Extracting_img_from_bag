@@ -17,11 +17,12 @@ def rostime2floatSecs(rostime):
 def main():    
     parser = argparse.ArgumentParser(description="Extract images from a ROS bag.")
     parser.add_argument("--bag_file", help="Input ROS bag.", default="2022-11-01-17-43-56.bag")
-    parser.add_argument("--output_dir", help="Output directory.", default="imgs/")
+    parser.add_argument("--out_dir", help="Output directory.", default="imgs/")
+    parser.add_argument("--sampling", type=int, help="downsampling image per this value", default=10)
 
     args = parser.parse_args()
     bag_file = args.bag_file #"_2019-03-27-22-30-28.bag" 
-    output_dir = args.output_dir #"extractedImages/"
+    output_dir = args.out_dir #"extractedImages/"
     # compressed = args.compressed #true false
     
     image_topic = "/teli_camera/image_raw/compressed"
@@ -36,7 +37,7 @@ def main():
 
     print("Save images...")
     count = 0
-    denom = 10
+    denom = args.sampling
     for topic, msg, t in bag.read_messages(topics=[image_topic]):
         if count % denom == 0:
             cv_img = bridge.compressed_imgmsg_to_cv2(msg, "bgr8")
