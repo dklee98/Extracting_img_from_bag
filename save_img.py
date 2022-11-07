@@ -25,7 +25,8 @@ def main():
     output_dir = args.out_dir #"extractedImages/"
     # compressed = args.compressed #true false
     
-    image_topic = "/teli_camera/image_raw/compressed"
+    # image_topic = "/teli_camera/image_raw/compressed"
+    image_topic = "/camera/image_color"
     
     jpg_quality = 100
     compr = cv2.IMWRITE_JPEG_QUALITY
@@ -40,7 +41,7 @@ def main():
     denom = args.sampling
     for topic, msg, t in bag.read_messages(topics=[image_topic]):
         if count % denom == 0:
-            cv_img = bridge.compressed_imgmsg_to_cv2(msg, "bgr8")
+            cv_img = bridge.imgmsg_to_cv2(msg, "bgr8")
             if cv_img is None:
                 print("nnonon")
                 continue
